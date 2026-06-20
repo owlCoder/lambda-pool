@@ -33,6 +33,14 @@
       "types": "./dist/application/inspect.d.ts",
       "import": "./dist/application/inspect.js"
     },
+    "./recommend": {
+      "types": "./dist/application/recommend.d.ts",
+      "import": "./dist/application/recommend.js"
+    },
+    "./config": {
+      "types": "./dist/core/config.d.ts",
+      "import": "./dist/core/config.js"
+    },
     "./providers": {
       "types": "./dist/core/providers.d.ts",
       "import": "./dist/core/providers.js"

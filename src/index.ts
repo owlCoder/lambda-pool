@@ -64,6 +64,8 @@ export {
   isTransientDbError,
 } from "./core/retry.ts";
 
+export { type PoolConfig, loadPoolConfig } from "./core/config.ts";
+
 // ---- application ----
 export {
   type Severity,
@@ -75,6 +77,12 @@ export {
 } from "./application/diagnostics.ts";
 
 export { type InspectEnv, inspectEnv } from "./application/inspect.ts";
+
+export {
+  type RecommendInput,
+  type Recommendation,
+  recommendForUrl,
+} from "./application/recommend.ts";
 
 // ---- adapters ----
 export {

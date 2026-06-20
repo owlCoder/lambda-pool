@@ -69,6 +69,25 @@ test("budget with bad args exits 2", () => {
   assert.match(r.err, /usage/);
 });
 
+test("recommend prints a provider and pool size", () => {
+  const r = run(["recommend", "postgres://u:p@db.aivencloud.com/app", "10"]);
+  assert.equal(r.code, 0);
+  assert.match(r.out, /provider: aiven/);
+  assert.match(r.out, /recommended pool limit:/);
+});
+
+test("recommend on an over-budget setup exits 1 and advises a pooler", () => {
+  const r = run(["recommend", "postgres://u:p@ep-x.eu.aws.neon.tech/app", "500"]);
+  assert.equal(r.code, 1);
+  assert.match(r.out, /pooler is advised/);
+});
+
+test("recommend without a url exits 2", () => {
+  const r = run(["recommend"]);
+  assert.equal(r.code, 2);
+  assert.match(r.err, /usage/);
+});
+
 test("providers lists known providers", () => {
   const r = run(["providers"]);
   assert.equal(r.code, 0);

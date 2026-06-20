@@ -6,12 +6,15 @@
 import { recommendPoolLimit } from "../core/budget.ts";
 import { formatReport } from "../application/diagnostics.ts";
 import { inspectEnv } from "../application/inspect.ts";
+import { recommendForUrl } from "../application/recommend.ts";
 import { listProviders } from "../core/providers.ts";
 
 const HELP = `lambda-pool — serverless-safe DB pool helper
 
 Usage:
   lambda-pool inspect          Lint the connection in your env for serverless safety
+  lambda-pool recommend <url> [instances]
+                               Recommend a pool size for a connection URL
   lambda-pool budget <max> <instances> [reserved] [other]
                                Recommend a per-instance pool size
   lambda-pool providers        List recognized managed providers
@@ -71,6 +74,30 @@ export function runCli(io: CliIo): number {
         });
         io.out(`recommended pool limit: ${r.recommendedPoolLimit}`);
         io.out(r.rationale);
+        return r.exceedsBudget ? 1 : 0;
+      } catch (e) {
+        io.err((e as Error).message);
+        return 2;
+      }
+    }
+
+    case "recommend": {
+      const [url, instances] = rest;
+      if (!url) {
+        io.err("usage: lambda-pool recommend <url> [instances]");
+        return 2;
+      }
+      try {
+        const r = recommendForUrl({
+          url,
+          ...(instances && Number.isFinite(Number(instances))
+            ? { expectedInstances: Number(instances) }
+            : {}),
+        });
+        io.out(`provider: ${r.provider}`);
+        io.out(`recommended pool limit: ${r.recommendedPoolLimit}`);
+        io.out(r.rationale);
+        if (r.poolerAdvised) io.out("→ a connection pooler is advised.");
         return r.exceedsBudget ? 1 : 0;
       } catch (e) {
         io.err((e as Error).message);
