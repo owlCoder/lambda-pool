@@ -63,6 +63,61 @@ const pool = new Pool(buildPgPoolOptions(process.env));
 
 Both also re-exported from the root: `import { buildPgPoolOptions } from "lambda-pool"`.
 
+## Diagnostics — lint your connection for serverless
+
+Beyond building options, `lambda-pool` can **analyze** a connection config and
+tell you whether it will survive serverless fan-out. Pure function, no I/O:
+
+```ts
+import { inspectEnv, formatReport } from "lambda-pool";
+
+const report = inspectEnv(process.env);
+console.log(formatReport(report));
+// lambda-pool diagnostics for mysql://u:***@pg.aivencloud.com/db [aiven]
+//   ⚠ SMALL_MAX_CONNECTIONS: Aiven typically caps max_connections around 20; keep the per-instance pool at 1.
+```
+
+It recognizes the provider from the host (Aiven, Neon, Supabase, PlanetScale,
+RDS/Aurora, Railway, Render, Vercel Postgres) and warns about: pool sizes too
+large for the provider's budget, SSL requested in the URL with no CA supplied,
+and using a direct host when a pooled endpoint is available.
+
+## CLI
+
+```bash
+# Lint the connection in your env (exit 1 on any warning — good as a CI gate)
+DATABASE_URL=postgres://… npx lambda-pool inspect
+
+# Recommend a per-instance pool size: max_connections, instances, [reserved], [other]
+npx lambda-pool budget 100 20
+#   recommended pool limit: 4
+#   97 usable connections (100 max − 3 reserved − 0 other) ÷ 20 instances → pool of 4 per instance (peak 80).
+
+# List recognized providers
+npx lambda-pool providers
+```
+
+## Budget calculator (programmatic)
+
+```ts
+import { recommendPoolLimit } from "lambda-pool";
+
+const { recommendedPoolLimit, exceedsBudget, rationale } = recommendPoolLimit({
+  maxConnections: 20,   // your DB's max_connections
+  expectedInstances: 30, // peak warm serverless instances
+});
+// recommendedPoolLimit: 1, exceedsBudget: true → use a pooler
+```
+
+## Connection-string utilities
+
+```ts
+import { parseConnectionString, redactUrl } from "lambda-pool";
+
+redactUrl("postgres://u:secret@host/db"); // → "postgres://u:***@host/db"
+parseConnectionString("mysql://root@127.0.0.1/test").port; // → 3306
+```
+
 ## Environment variables
 
 | Variable | Purpose | Default |
