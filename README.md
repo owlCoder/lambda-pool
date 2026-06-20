@@ -88,7 +88,10 @@ and using a direct host when a pooled endpoint is available.
 # Lint the connection in your env (exit 1 on any warning — good as a CI gate)
 DATABASE_URL=postgres://… npx lambda-pool inspect
 
-# Recommend a per-instance pool size: max_connections, instances, [reserved], [other]
+# Recommend a pool size straight from a connection URL (detects the provider)
+npx lambda-pool recommend "postgres://…@db.aivencloud.com/app" 10
+
+# Recommend from raw numbers: max_connections, instances, [reserved], [other]
 npx lambda-pool budget 100 20
 #   recommended pool limit: 4
 #   97 usable connections (100 max − 3 reserved − 0 other) ÷ 20 instances → pool of 4 per instance (peak 80).
@@ -165,6 +168,8 @@ if (!r.ok) { /* handle r.error */ } else { /* use r.value */ }
 | `lambda-pool/providers` | `detectProvider`, `listProviders`, `isPooledEndpoint` |
 | `lambda-pool/budget` | `recommendPoolLimit` |
 | `lambda-pool/diagnostics` | `diagnose`, `formatReport` |
+| `lambda-pool/recommend` | `recommendForUrl` |
+| `lambda-pool/config` | `loadPoolConfig` |
 | `lambda-pool/health` | `checkHealth`, `isReachable` |
 | `lambda-pool/retry` | `withRetry`, `backoffDelay`, `isTransientDbError` |
 | `lambda-pool/result` | `Result`, `ok`, `err`, `attempt`, `unwrap` |
@@ -203,6 +208,12 @@ Managed providers hand you a CA bundle, but the URI's `?ssl-mode=REQUIRED` /
 `?sslmode=require` param is **not** interpreted by `mysql2` / `pg` the way people
 expect. Pass the CA explicitly via `DATABASE_SSL_CA_BASE64` and the server is
 verified (`rejectUnauthorized: true`).
+
+## Architecture
+
+The source is organized into strict clean-architecture layers
+(`core → application → adapters → presentation`) with the dependency rule
+enforced in CI. See [ARCHITECTURE.md](./ARCHITECTURE.md).
 
 ## Zero runtime dependencies
 

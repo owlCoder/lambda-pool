@@ -20,6 +20,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 - Jittered exponential backoff (`withRetry`, `backoffDelay`, `isTransientDbError`).
 - `Result` type with `ok`/`err`/`attempt`/`unwrap` and non-throwing
   `safeParseConnectionString`.
+- `loadPoolConfig` to normalize environment variables into a typed config.
+- `recommendForUrl` use-case and a `recommend` CLI command that suggest a pool
+  size directly from a connection URL.
+- Clean-architecture layout (`core`/`application`/`adapters`/`presentation`)
+  with the dependency rule enforced by ESLint, documented in ARCHITECTURE.md.
 - ESLint flat config and `lint` script.
 - Subpath exports for every module.
 - CI matrix (Node 20/22/24) and Docker-based integration tests against real
