@@ -1,0 +1,35 @@
+# Throwaway databases for `npm run test:integration`.
+# Tiny max_connections to mirror a managed free tier (the whole point of this lib).
+#
+#   docker compose -f docker-compose.test.yml up -d
+#   RUN_DB_TESTS=1 npm run test:integration
+#   docker compose -f docker-compose.test.yml down -v
+
+services:
+  mysql:
+    image: mysql:8.4
+    command: ["--max-connections=10"]
+    environment:
+      MYSQL_ROOT_PASSWORD: test
+      MYSQL_DATABASE: test
+    ports:
+      - "3399:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-ptest"]
+      interval: 3s
+      timeout: 5s
+      retries: 20
+
+  postgres:
+    image: postgres:16
+    command: ["-c", "max_connections=10"]
+    environment:
+      POSTGRES_PASSWORD: test
+      POSTGRES_DB: test
+    ports:
+      - "5499:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d test"]
+      interval: 3s
+      timeout: 5s
+      retries: 20
