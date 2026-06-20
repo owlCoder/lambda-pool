@@ -6,6 +6,7 @@
 import { recommendPoolLimit } from "../core/budget.ts";
 import { formatReport } from "../application/diagnostics.ts";
 import { inspectEnv } from "../application/inspect.ts";
+import { preflight } from "../application/preflight.ts";
 import { recommendForUrl } from "../application/recommend.ts";
 import { listProviders } from "../core/providers.ts";
 
@@ -13,6 +14,7 @@ const HELP = `lambda-pool — serverless-safe DB pool helper
 
 Usage:
   lambda-pool inspect          Lint the connection in your env for serverless safety
+  lambda-pool doctor           Full preflight check of the connection in your env
   lambda-pool recommend <url> [instances]
                                Recommend a pool size for a connection URL
   lambda-pool budget <max> <instances> [reserved] [other]
@@ -35,7 +37,7 @@ interface CliIo {
 }
 
 /** Run the CLI and return a process exit code. Pure-ish: I/O is injected. */
-export function runCli(io: CliIo): number {
+export async function runCli(io: CliIo): Promise<number> {
   const [cmd, ...rest] = io.argv;
 
   switch (cmd) {
@@ -52,6 +54,20 @@ export function runCli(io: CliIo): number {
         io.out(formatReport(report));
         // Non-zero on any warning/error so `inspect` is usable as a CI gate.
         const clean = report.diagnostics.every((d) => d.severity === "info");
+        return clean ? 0 : 1;
+      } catch (e) {
+        io.err((e as Error).message);
+        return 2;
+      }
+    }
+
+    case "doctor": {
+      try {
+        const result = await preflight(io.env);
+        io.out(formatReport(result.report));
+        // doctor is a strict gate: any non-info diagnostic is a failure.
+        const clean = result.diagnostics.every((d) => d.severity === "info");
+        io.out(clean ? "\n✓ preflight passed" : "\n✖ preflight found issues");
         return clean ? 0 : 1;
       } catch (e) {
         io.err((e as Error).message);
