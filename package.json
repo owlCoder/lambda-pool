@@ -59,16 +59,20 @@
   "scripts": {
     "build": "node scripts/clean.mjs && tsc -p tsconfig.json",
     "typecheck": "tsc -p tsconfig.json --noEmit",
+    "lint": "eslint .",
     "test": "node --test --experimental-strip-types test/*.test.ts",
     "test:integration": "node --test --experimental-strip-types test/integration/*.test.ts",
     "prepack": "npm run build"
   },
   "devDependencies": {
+    "@eslint/js": "^9.0.0",
     "@types/node": "^22.0.0",
+    "@types/pg": "^8.11.0",
+    "eslint": "^9.0.0",
     "mysql2": "^3.11.0",
     "pg": "^8.13.0",
-    "@types/pg": "^8.11.0",
-    "typescript": "5.9.3"
+    "typescript": "5.9.3",
+    "typescript-eslint": "^8.0.0"
   },
   "license": "MIT",
   "sideEffects": false,
