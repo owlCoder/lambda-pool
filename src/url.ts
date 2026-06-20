@@ -5,6 +5,8 @@
 // messages, and crash reports. Leaking a DB password into a log aggregator is a
 // classic incident; `redactUrl` makes "log the connection target" safe.
 
+import { attempt, type Result } from "./result.ts";
+
 export type Engine = "mysql" | "postgres";
 
 export interface ParsedConnection {
@@ -68,6 +70,16 @@ export function parseConnectionString(uri: string): ParsedConnection {
     database,
     params,
   };
+}
+
+/**
+ * Non-throwing variant of {@link parseConnectionString}. Returns a Result so
+ * callers can branch instead of using try/catch.
+ */
+export function safeParseConnectionString(
+  uri: string,
+): Result<ParsedConnection, Error> {
+  return attempt(() => parseConnectionString(uri));
 }
 
 /**

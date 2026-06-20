@@ -26,9 +26,19 @@ export {
 } from "./pg.ts";
 
 export {
+  type Result,
+  ok,
+  err,
+  attempt,
+  unwrap,
+  unwrapOr,
+} from "./result.ts";
+
+export {
   type Engine,
   type ParsedConnection,
   parseConnectionString,
+  safeParseConnectionString,
   redactUrl,
   urlRequestsSsl,
   defaultPort,
