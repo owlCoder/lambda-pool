@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 
-import { runCli } from "../src/cli.ts";
+import { runCli } from "../src/presentation/cli.ts";
 
 function run(argv: string[], env: NodeJS.ProcessEnv = {}) {
   const out: string[] = [];

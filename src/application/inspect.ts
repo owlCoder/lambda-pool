@@ -5,7 +5,7 @@
 // values themselves. Kept separate from the builders so each module has one job.
 
 import { diagnose, type DiagnoseReport } from "./diagnostics.ts";
-import { resolvePoolLimit, firstEnv, type Env } from "./shared.ts";
+import { resolvePoolLimit, firstEnv, type Env } from "../core/env.ts";
 
 export interface InspectEnv extends Env {
   DATABASE_URL?: string;

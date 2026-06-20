@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 
-import { recommendPoolLimit } from "../src/budget.ts";
+import { recommendPoolLimit } from "../src/core/budget.ts";
 
 test("splits the usable budget across instances", () => {
   const r = recommendPoolLimit({

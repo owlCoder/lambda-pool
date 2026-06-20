@@ -3,10 +3,10 @@
 // Thin presentation layer over the pure core; it parses argv, reads env, calls
 // the library, prints text, and sets an exit code. No business logic lives here.
 
-import { recommendPoolLimit } from "./budget.ts";
-import { formatReport } from "./diagnostics.ts";
-import { inspectEnv } from "./inspect.ts";
-import { listProviders } from "./providers.ts";
+import { recommendPoolLimit } from "../core/budget.ts";
+import { formatReport } from "../application/diagnostics.ts";
+import { inspectEnv } from "../application/inspect.ts";
+import { listProviders } from "../core/providers.ts";
 
 const HELP = `lambda-pool — serverless-safe DB pool helper
 

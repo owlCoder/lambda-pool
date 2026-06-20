@@ -6,7 +6,7 @@ import {
   getProvider,
   isPooledEndpoint,
   listProviders,
-} from "../src/providers.ts";
+} from "../src/core/providers.ts";
 
 test("detects each known provider by host", () => {
   assert.equal(detectProvider("ep-cool-1.eu-central-1.aws.neon.tech").id, "neon");

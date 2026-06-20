@@ -9,7 +9,7 @@ import {
   decodeCaBase64,
   firstEnv,
   resolvePoolLimit,
-} from "./shared.ts";
+} from "../core/env.ts";
 
 export interface MysqlPoolEnv extends Env {
   /** Connection URI (mysql://...). Alias: MYSQL_URL. */

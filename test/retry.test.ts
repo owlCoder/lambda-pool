@@ -5,7 +5,7 @@ import {
   backoffDelay,
   isTransientDbError,
   withRetry,
-} from "../src/retry.ts";
+} from "../src/core/retry.ts";
 
 const noSleep = async () => {};
 

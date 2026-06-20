@@ -1,8 +1,8 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 
-import { attempt, err, ok, unwrap, unwrapOr } from "../src/result.ts";
-import { safeParseConnectionString } from "../src/url.ts";
+import { attempt, err, ok, unwrap, unwrapOr } from "../src/core/result.ts";
+import { safeParseConnectionString } from "../src/core/url.ts";
 
 test("ok and err construct discriminated results", () => {
   assert.deepEqual(ok(5), { ok: true, value: 5 });

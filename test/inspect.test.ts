@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 
-import { inspectEnv } from "../src/inspect.ts";
+import { inspectEnv } from "../src/application/inspect.ts";
 
 test("inspects from DATABASE_URL with defaults", () => {
   const r = inspectEnv({ DATABASE_URL: "postgres://u:p@pg.aivencloud.com/db" });

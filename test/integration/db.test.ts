@@ -7,9 +7,9 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 
-import { checkHealth } from "../../src/health.ts";
-import { buildMysqlPoolOptions } from "../../src/mysql.ts";
-import { buildPgPoolOptions } from "../../src/pg.ts";
+import { checkHealth } from "../../src/adapters/health.ts";
+import { buildMysqlPoolOptions } from "../../src/adapters/mysql.ts";
+import { buildPgPoolOptions } from "../../src/adapters/pg.ts";
 
 const enabled = process.env.RUN_DB_TESTS === "1";
 

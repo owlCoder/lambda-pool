@@ -5,7 +5,7 @@
 // Adapters live next to the builders. This keeps `lambda-pool` dependency-free
 // while still offering a "is the DB reachable?" helper.
 
-import type { Result } from "./result.ts";
+import type { Result } from "../core/result.ts";
 
 /**
  * The minimal surface needed to run a trivial probe query. Both

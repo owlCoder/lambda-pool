@@ -1,9 +1,9 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 
-import { buildMysqlPoolOptions } from "../src/mysql.ts";
-import { buildPgPoolOptions } from "../src/pg.ts";
-import { decodeCaBase64, resolvePoolLimit } from "../src/shared.ts";
+import { buildMysqlPoolOptions } from "../src/adapters/mysql.ts";
+import { buildPgPoolOptions } from "../src/adapters/pg.ts";
+import { decodeCaBase64, resolvePoolLimit } from "../src/core/env.ts";
 
 test("resolvePoolLimit defaults to 1", () => {
   assert.equal(resolvePoolLimit(undefined), 1);

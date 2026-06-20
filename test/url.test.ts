@@ -6,7 +6,7 @@ import {
   parseConnectionString,
   redactUrl,
   urlRequestsSsl,
-} from "../src/url.ts";
+} from "../src/core/url.ts";
 
 test("parses a full postgres URI", () => {
   const p = parseConnectionString(

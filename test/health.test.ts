@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 
-import { checkHealth, isReachable, type Queryable } from "../src/health.ts";
+import { checkHealth, isReachable, type Queryable } from "../src/adapters/health.ts";
 
 const okDb: Queryable = { query: async () => [[{ "1": 1 }]] };
 const failDb: Queryable = {

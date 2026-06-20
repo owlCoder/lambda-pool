@@ -6,7 +6,7 @@
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "bin": {
-    "lambda-pool": "./dist/bin.js"
+    "lambda-pool": "./dist/presentation/bin.js"
   },
   "exports": {
     ".": {
@@ -14,40 +14,44 @@
       "import": "./dist/index.js"
     },
     "./mysql": {
-      "types": "./dist/mysql.d.ts",
-      "import": "./dist/mysql.js"
+      "types": "./dist/adapters/mysql.d.ts",
+      "import": "./dist/adapters/mysql.js"
     },
     "./pg": {
-      "types": "./dist/pg.d.ts",
-      "import": "./dist/pg.js"
-    },
-    "./providers": {
-      "types": "./dist/providers.d.ts",
-      "import": "./dist/providers.js"
-    },
-    "./budget": {
-      "types": "./dist/budget.d.ts",
-      "import": "./dist/budget.js"
-    },
-    "./diagnostics": {
-      "types": "./dist/diagnostics.d.ts",
-      "import": "./dist/diagnostics.js"
-    },
-    "./url": {
-      "types": "./dist/url.d.ts",
-      "import": "./dist/url.js"
+      "types": "./dist/adapters/pg.d.ts",
+      "import": "./dist/adapters/pg.js"
     },
     "./health": {
-      "types": "./dist/health.d.ts",
-      "import": "./dist/health.js"
+      "types": "./dist/adapters/health.d.ts",
+      "import": "./dist/adapters/health.js"
+    },
+    "./diagnostics": {
+      "types": "./dist/application/diagnostics.d.ts",
+      "import": "./dist/application/diagnostics.js"
+    },
+    "./inspect": {
+      "types": "./dist/application/inspect.d.ts",
+      "import": "./dist/application/inspect.js"
+    },
+    "./providers": {
+      "types": "./dist/core/providers.d.ts",
+      "import": "./dist/core/providers.js"
+    },
+    "./budget": {
+      "types": "./dist/core/budget.d.ts",
+      "import": "./dist/core/budget.js"
+    },
+    "./url": {
+      "types": "./dist/core/url.d.ts",
+      "import": "./dist/core/url.js"
     },
     "./retry": {
-      "types": "./dist/retry.d.ts",
-      "import": "./dist/retry.js"
+      "types": "./dist/core/retry.d.ts",
+      "import": "./dist/core/retry.js"
     },
     "./result": {
-      "types": "./dist/result.d.ts",
-      "import": "./dist/result.js"
+      "types": "./dist/core/result.d.ts",
+      "import": "./dist/core/result.js"
     },
     "./package.json": "./package.json"
   },

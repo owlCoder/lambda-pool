@@ -1,30 +1,20 @@
 // lambda-pool — serverless-safe connection-pool options for MySQL and Postgres.
 //
-// Layering (clean architecture):
-//   - url.ts         pure parsing/redaction      (no deps)
-//   - providers.ts   pure preset registry        (no deps)
-//   - budget.ts      pure connection-budget math (no deps)
-//   - diagnostics.ts composes the above          (no I/O)
-//   - mysql.ts/pg.ts adapters → driver option objects
+// Clean-architecture layering (dependencies point inward only):
 //
-// Narrow subpaths are also published so you can import just one driver's types:
-//   import { buildMysqlPoolOptions } from "lambda-pool/mysql";
-//   import { buildPgPoolOptions }    from "lambda-pool/pg";
+//   presentation/  cli, bin                 (process I/O)
+//        │  depends on
+//   adapters/      mysql, pg, health        (driver-facing option objects + ports)
+//        │  depends on
+//   application/   diagnostics, inspect     (use-cases composing the core)
+//        │  depends on
+//   core/          result, env, url,        (pure, zero-dep, no I/O)
+//                  providers, budget, retry
+//
+// Nothing in core imports outward; adapters/presentation never leak into core.
+// Subpaths are published per module so consumers can import the narrowest slice.
 
-export {
-  buildMysqlPoolOptions,
-  type MysqlPoolEnv,
-  type MysqlPoolOptions,
-  type BuildMysqlOptions,
-} from "./mysql.ts";
-
-export {
-  buildPgPoolOptions,
-  type PgPoolEnv,
-  type PgPoolOptions,
-  type BuildPgOptions,
-} from "./pg.ts";
-
+// ---- core ----
 export {
   type Result,
   ok,
@@ -32,7 +22,15 @@ export {
   attempt,
   unwrap,
   unwrapOr,
-} from "./result.ts";
+} from "./core/result.ts";
+
+export {
+  type Env,
+  type DecodedTls,
+  resolvePoolLimit,
+  decodeCaBase64,
+  firstEnv,
+} from "./core/env.ts";
 
 export {
   type Engine,
@@ -42,7 +40,7 @@ export {
   redactUrl,
   urlRequestsSsl,
   defaultPort,
-} from "./url.ts";
+} from "./core/url.ts";
 
 export {
   type ProviderId,
@@ -51,14 +49,22 @@ export {
   getProvider,
   listProviders,
   isPooledEndpoint,
-} from "./providers.ts";
+} from "./core/providers.ts";
 
 export {
   type BudgetInput,
   type BudgetResult,
   recommendPoolLimit,
-} from "./budget.ts";
+} from "./core/budget.ts";
 
+export {
+  type RetryOptions,
+  backoffDelay,
+  withRetry,
+  isTransientDbError,
+} from "./core/retry.ts";
+
+// ---- application ----
 export {
   type Severity,
   type Diagnostic,
@@ -66,9 +72,24 @@ export {
   type DiagnoseReport,
   diagnose,
   formatReport,
-} from "./diagnostics.ts";
+} from "./application/diagnostics.ts";
 
-export { type InspectEnv, inspectEnv } from "./inspect.ts";
+export { type InspectEnv, inspectEnv } from "./application/inspect.ts";
+
+// ---- adapters ----
+export {
+  buildMysqlPoolOptions,
+  type MysqlPoolEnv,
+  type MysqlPoolOptions,
+  type BuildMysqlOptions,
+} from "./adapters/mysql.ts";
+
+export {
+  buildPgPoolOptions,
+  type PgPoolEnv,
+  type PgPoolOptions,
+  type BuildPgOptions,
+} from "./adapters/pg.ts";
 
 export {
   type Queryable,
@@ -76,19 +97,4 @@ export {
   type HealthOptions,
   checkHealth,
   isReachable,
-} from "./health.ts";
-
-export {
-  type RetryOptions,
-  backoffDelay,
-  withRetry,
-  isTransientDbError,
-} from "./retry.ts";
-
-export {
-  type Env,
-  type DecodedTls,
-  resolvePoolLimit,
-  decodeCaBase64,
-  firstEnv,
-} from "./shared.ts";
+} from "./adapters/health.ts";

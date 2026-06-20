@@ -9,7 +9,7 @@ import {
   decodeCaBase64,
   firstEnv,
   resolvePoolLimit,
-} from "./shared.ts";
+} from "../core/env.ts";
 
 export interface PgPoolEnv extends Env {
   /** Connection URI (postgres://...). Aliases: POSTGRES_URL, PG_URL. */

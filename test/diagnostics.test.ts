@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 
-import { diagnose, formatReport } from "../src/diagnostics.ts";
+import { diagnose, formatReport } from "../src/application/diagnostics.ts";
 
 function codes(url: string, poolLimit: number, extra = {}) {
   return diagnose({ url, poolLimit, ...extra }).diagnostics.map((d) => d.code);

@@ -5,9 +5,9 @@
 // present it (CLI, startup log, test assertion). This is the "lint your DB
 // connection for serverless" feature.
 
-import { recommendPoolLimit } from "./budget.ts";
-import { detectProvider, isPooledEndpoint, type ProviderId } from "./providers.ts";
-import { parseConnectionString, redactUrl, urlRequestsSsl } from "./url.ts";
+import { recommendPoolLimit } from "../core/budget.ts";
+import { detectProvider, isPooledEndpoint, type ProviderId } from "../core/providers.ts";
+import { parseConnectionString, redactUrl, urlRequestsSsl } from "../core/url.ts";
 
 export type Severity = "error" | "warning" | "info";
 
