@@ -20,6 +20,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 - Jittered exponential backoff (`withRetry`, `backoffDelay`, `isTransientDbError`).
 - `Result` type with `ok`/`err`/`attempt`/`unwrap` and non-throwing
   `safeParseConnectionString`.
+- `preflight` startup gate (config + diagnostics + an optional injected
+  reachability probe) and a `doctor` CLI command.
+- `redact` for structural masking of secret-looking object keys in logs.
+- `buildDsn` to assemble a connection string from typed parts.
 - `loadPoolConfig` to normalize environment variables into a typed config.
 - `recommendForUrl` use-case and a `recommend` CLI command that suggest a pool
   size directly from a connection URL.

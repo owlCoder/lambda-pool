@@ -88,6 +88,9 @@ and using a direct host when a pooled endpoint is available.
 # Lint the connection in your env (exit 1 on any warning — good as a CI gate)
 DATABASE_URL=postgres://… npx lambda-pool inspect
 
+# Full preflight check (config + diagnostics) — strict gate, exit 1 on any issue
+DATABASE_URL=postgres://… npx lambda-pool doctor
+
 # Recommend a pool size straight from a connection URL (detects the provider)
 npx lambda-pool recommend "postgres://…@db.aivencloud.com/app" 10
 
@@ -147,6 +150,46 @@ const client = await withRetry(() => pool.connect(), {
 });
 ```
 
+## Preflight (startup gate)
+
+Run a single check at boot that combines config validation, diagnostics, and an
+optional live reachability probe. The probe is **injected**, so the check stays
+pure unless you opt into a real connection:
+
+```ts
+import { preflight } from "lambda-pool";
+import { isReachable } from "lambda-pool/health";
+
+const result = await preflight(process.env, {
+  probe: () => isReachable(pool), // optional live check
+});
+if (!result.ok) {
+  console.error(result.diagnostics);
+  process.exit(1);
+}
+```
+
+## Redact objects for logging
+
+`redactUrl` masks a connection string; `redact` masks whole objects (config
+dumps, error context) by key name, so secrets never reach your log aggregator:
+
+```ts
+import { redact } from "lambda-pool";
+
+redact({ host: "db", password: "p", nested: { token: "t" } });
+// → { host: "db", password: "***", nested: { token: "***" } }
+```
+
+## Build a connection string from parts
+
+```ts
+import { buildDsn } from "lambda-pool";
+
+buildDsn({ engine: "postgres", host: "db", user: "u", password: "p/w", database: "app" });
+// → "postgres://u:p%2Fw@db:5432/app"  (credentials safely encoded)
+```
+
 ## Result type
 
 Non-throwing variants return a small `Result` you can branch on:
@@ -169,7 +212,10 @@ if (!r.ok) { /* handle r.error */ } else { /* use r.value */ }
 | `lambda-pool/budget` | `recommendPoolLimit` |
 | `lambda-pool/diagnostics` | `diagnose`, `formatReport` |
 | `lambda-pool/recommend` | `recommendForUrl` |
+| `lambda-pool/preflight` | `preflight` |
 | `lambda-pool/config` | `loadPoolConfig` |
+| `lambda-pool/dsn` | `buildDsn` |
+| `lambda-pool/redact` | `redact` |
 | `lambda-pool/health` | `checkHealth`, `isReachable` |
 | `lambda-pool/retry` | `withRetry`, `backoffDelay`, `isTransientDbError` |
 | `lambda-pool/result` | `Result`, `ok`, `err`, `attempt`, `unwrap` |
