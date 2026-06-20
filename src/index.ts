@@ -1,8 +1,13 @@
 // lambda-pool — serverless-safe connection-pool options for MySQL and Postgres.
 //
-// Root entry re-exports both adapters and the shared helpers. You can also
-// import the narrow subpaths to avoid pulling in the other driver's types:
+// Layering (clean architecture):
+//   - url.ts         pure parsing/redaction      (no deps)
+//   - providers.ts   pure preset registry        (no deps)
+//   - budget.ts      pure connection-budget math (no deps)
+//   - diagnostics.ts composes the above          (no I/O)
+//   - mysql.ts/pg.ts adapters → driver option objects
 //
+// Narrow subpaths are also published so you can import just one driver's types:
 //   import { buildMysqlPoolOptions } from "lambda-pool/mysql";
 //   import { buildPgPoolOptions }    from "lambda-pool/pg";
 
@@ -19,6 +24,41 @@ export {
   type PgPoolOptions,
   type BuildPgOptions,
 } from "./pg.ts";
+
+export {
+  type Engine,
+  type ParsedConnection,
+  parseConnectionString,
+  redactUrl,
+  urlRequestsSsl,
+  defaultPort,
+} from "./url.ts";
+
+export {
+  type ProviderId,
+  type ProviderPreset,
+  detectProvider,
+  getProvider,
+  listProviders,
+  isPooledEndpoint,
+} from "./providers.ts";
+
+export {
+  type BudgetInput,
+  type BudgetResult,
+  recommendPoolLimit,
+} from "./budget.ts";
+
+export {
+  type Severity,
+  type Diagnostic,
+  type DiagnoseInput,
+  type DiagnoseReport,
+  diagnose,
+  formatReport,
+} from "./diagnostics.ts";
+
+export { type InspectEnv, inspectEnv } from "./inspect.ts";
 
 export {
   type Env,
