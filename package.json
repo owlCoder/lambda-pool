@@ -5,6 +5,9 @@
   "description": "Serverless-safe connection-pool options for MySQL (mysql2) and Postgres (pg) on Vercel/Lambda with small max_connections (Aiven, Neon, RDS micro). Zero runtime dependencies.",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "bin": {
+    "lambda-pool": "./dist/bin.js"
+  },
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
