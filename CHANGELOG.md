@@ -15,6 +15,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 - Diagnostics that lint a connection config for serverless safety, plus
   `inspectEnv` to run them straight from environment variables.
 - CLI: `lambda-pool inspect | budget | providers`.
+- Driver-agnostic health checks (`checkHealth`, `isReachable`) via a minimal
+  `Queryable` port.
+- Jittered exponential backoff (`withRetry`, `backoffDelay`, `isTransientDbError`).
+- `Result` type with `ok`/`err`/`attempt`/`unwrap` and non-throwing
+  `safeParseConnectionString`.
+- ESLint flat config and `lint` script.
 - Subpath exports for every module.
 - CI matrix (Node 20/22/24) and Docker-based integration tests against real
   MySQL and Postgres.

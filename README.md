@@ -118,6 +118,59 @@ redactUrl("postgres://u:secret@host/db"); // → "postgres://u:***@host/db"
 parseConnectionString("mysql://root@127.0.0.1/test").port; // → 3306
 ```
 
+## Health checks
+
+Driver-agnostic readiness probe. Works with any pool that has a `query()`
+method (both `mysql2` and `pg` do), so `lambda-pool` stays dependency-free:
+
+```ts
+import { checkHealth } from "lambda-pool";
+
+const { healthy, latencyMs, error } = await checkHealth(pool, { timeoutMs: 2000 });
+// use in a /healthz endpoint — never throws
+```
+
+## Retry transient connect errors
+
+Cold starts and brief failovers cause transient connect errors. `withRetry`
+wraps an operation with jittered exponential backoff:
+
+```ts
+import { withRetry, isTransientDbError } from "lambda-pool";
+
+const client = await withRetry(() => pool.connect(), {
+  attempts: 4,
+  retryable: isTransientDbError, // don't retry auth failures
+});
+```
+
+## Result type
+
+Non-throwing variants return a small `Result` you can branch on:
+
+```ts
+import { safeParseConnectionString } from "lambda-pool";
+
+const r = safeParseConnectionString(process.env.DATABASE_URL ?? "");
+if (!r.ok) { /* handle r.error */ } else { /* use r.value */ }
+```
+
+## API surface
+
+| Import | Exports |
+|---|---|
+| `lambda-pool/mysql` | `buildMysqlPoolOptions` |
+| `lambda-pool/pg` | `buildPgPoolOptions` |
+| `lambda-pool/url` | `parseConnectionString`, `safeParseConnectionString`, `redactUrl`, `urlRequestsSsl` |
+| `lambda-pool/providers` | `detectProvider`, `listProviders`, `isPooledEndpoint` |
+| `lambda-pool/budget` | `recommendPoolLimit` |
+| `lambda-pool/diagnostics` | `diagnose`, `formatReport` |
+| `lambda-pool/health` | `checkHealth`, `isReachable` |
+| `lambda-pool/retry` | `withRetry`, `backoffDelay`, `isTransientDbError` |
+| `lambda-pool/result` | `Result`, `ok`, `err`, `attempt`, `unwrap` |
+
+All of the above are also re-exported from the package root.
+
 ## Environment variables
 
 | Variable | Purpose | Default |
