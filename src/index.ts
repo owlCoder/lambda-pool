@@ -71,6 +71,21 @@ export {
 export { type InspectEnv, inspectEnv } from "./inspect.ts";
 
 export {
+  type Queryable,
+  type HealthResult,
+  type HealthOptions,
+  checkHealth,
+  isReachable,
+} from "./health.ts";
+
+export {
+  type RetryOptions,
+  backoffDelay,
+  withRetry,
+  isTransientDbError,
+} from "./retry.ts";
+
+export {
   type Env,
   type DecodedTls,
   resolvePoolLimit,

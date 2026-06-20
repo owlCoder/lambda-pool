@@ -37,6 +37,18 @@
       "types": "./dist/url.d.ts",
       "import": "./dist/url.js"
     },
+    "./health": {
+      "types": "./dist/health.d.ts",
+      "import": "./dist/health.js"
+    },
+    "./retry": {
+      "types": "./dist/retry.d.ts",
+      "import": "./dist/retry.js"
+    },
+    "./result": {
+      "types": "./dist/result.d.ts",
+      "import": "./dist/result.js"
+    },
     "./package.json": "./package.json"
   },
   "files": [
