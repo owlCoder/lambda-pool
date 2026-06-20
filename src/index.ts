@@ -66,6 +66,14 @@ export {
 
 export { type PoolConfig, loadPoolConfig } from "./core/config.ts";
 
+export {
+  type RedactOptions,
+  DEFAULT_SECRET_KEYS,
+  redact,
+} from "./core/redact.ts";
+
+export { type DsnParts, buildDsn } from "./core/dsn.ts";
+
 // ---- application ----
 export {
   type Severity,
@@ -83,6 +91,12 @@ export {
   type Recommendation,
   recommendForUrl,
 } from "./application/recommend.ts";
+
+export {
+  type PreflightOptions,
+  type PreflightResult,
+  preflight,
+} from "./application/preflight.ts";
 
 // ---- adapters ----
 export {

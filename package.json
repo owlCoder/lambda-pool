@@ -37,9 +37,21 @@
       "types": "./dist/application/recommend.d.ts",
       "import": "./dist/application/recommend.js"
     },
+    "./preflight": {
+      "types": "./dist/application/preflight.d.ts",
+      "import": "./dist/application/preflight.js"
+    },
     "./config": {
       "types": "./dist/core/config.d.ts",
       "import": "./dist/core/config.js"
+    },
+    "./redact": {
+      "types": "./dist/core/redact.d.ts",
+      "import": "./dist/core/redact.js"
+    },
+    "./dsn": {
+      "types": "./dist/core/dsn.d.ts",
+      "import": "./dist/core/dsn.js"
     },
     "./providers": {
       "types": "./dist/core/providers.d.ts",
