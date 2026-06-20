@@ -3,10 +3,23 @@
   "version": "0.1.0",
   "type": "module",
   "description": "Serverless-safe connection-pool options for MySQL (mysql2) and Postgres (pg) on Vercel/Lambda with small max_connections (Aiven, Neon, RDS micro). Zero runtime dependencies.",
+  "author": "owlCoder",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/owlCoder/lambda-pool.git"
+  },
+  "homepage": "https://github.com/owlCoder/lambda-pool#readme",
+  "bugs": {
+    "url": "https://github.com/owlCoder/lambda-pool/issues"
+  },
+  "engines": {
+    "node": ">=20"
+  },
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "bin": {
-    "lambda-pool": "./dist/presentation/bin.js"
+    "lambda-pool": "dist/presentation/bin.js"
   },
   "exports": {
     ".": {
@@ -86,6 +99,8 @@
     "lint": "eslint .",
     "test": "node --test --experimental-strip-types test/*.test.ts",
     "test:integration": "node --test --experimental-strip-types test/integration/*.test.ts",
+    "check": "npm run lint && npm run typecheck && npm test",
+    "prepublishOnly": "npm run check",
     "prepack": "npm run build"
   },
   "devDependencies": {
@@ -98,7 +113,6 @@
     "typescript": "5.9.3",
     "typescript-eslint": "^8.0.0"
   },
-  "license": "MIT",
   "sideEffects": false,
   "publishConfig": {
     "access": "public"

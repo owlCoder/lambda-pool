@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.1.0] - 2026-06-20
+
 ### Added
 - MySQL (`mysql2`) and Postgres (`pg`) serverless-safe pool option builders.
 - Connection-string parsing, password redaction, and SSL-request detection.
@@ -34,4 +36,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 - CI matrix (Node 20/22/24) and Docker-based integration tests against real
   MySQL and Postgres.
 
-[Unreleased]: https://github.com/owlCoder/lambda-pool/commits/main
+[Unreleased]: https://github.com/owlCoder/lambda-pool/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/owlCoder/lambda-pool/releases/tag/v0.1.0

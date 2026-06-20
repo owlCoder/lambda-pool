@@ -32,7 +32,7 @@ docker compose -f docker-compose.test.yml down -v
 
 ## Adding a provider preset
 
-Add an entry to `PRESETS` in `src/providers.ts` with a `matches(host)` predicate
+Add an entry to `PRESETS` in `src/core/providers.ts` with a `matches(host)` predicate
 and the provider's `typicalMaxConnections`, then cover it in
 `test/providers.test.ts`. Detection is purely structural on the hostname — no
 network calls.
